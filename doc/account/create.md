@@ -1,10 +1,9 @@
 # Create Account
-================
 Submits data to register an account to the database.
 
 - URL
-  api/account
+  - api/account
 - Method
-  POST
+  - POST
 - URL Parameters
-  none
+  - none
