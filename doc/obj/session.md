@@ -4,7 +4,7 @@ The structure of a user session.
 ## Properties
 - id
   - type: string
-  - description: unique identifier for the account
+  - description: unique identifier for the resource
 - created
   - type: integer
   - description: used to mark when this resource was created since epoch

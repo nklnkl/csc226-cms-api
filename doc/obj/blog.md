@@ -1,5 +1,5 @@
-# Account
-The structure of a user account.
+# Blog
+The structure of a blog.
 
 ## Properties
 - id
@@ -11,13 +11,15 @@ The structure of a user account.
 - updated
   - type: integer
   - description: used to mark when this resource was last updated since epoch
-- email
+- account_id
   - type: string
-  - description: used to authenticate a user for a session
-- password
+  - description: used to identify which account this resource is associated
+    with
+- title
   - type: string
-  - description: password used to authenticate a user for a session, password
-    is encrypted prior to database submission
-- username
+  - max: 255
+  - description: used to title a blog
+- body
   - type: string
-  - description: used as a public handler for a user's account
+  - max: 5000
+  - description: used as the content of the blog
