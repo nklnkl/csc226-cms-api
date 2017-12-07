@@ -1,4 +1,4 @@
-# Create Account
+# Update Account
 Submits data to register an account to the database.
 
 ## Request
