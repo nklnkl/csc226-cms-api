@@ -1,9 +1,9 @@
 # Deactivate Account
-Deactivates an account from the database.
+Deactivates account from database.
 
 ## Request
 - url
-  - api/account
+  - api/account/:id
 - method
   - DELETE
 - headers
@@ -11,33 +11,20 @@ Deactivates an account from the database.
   - 'session-id' (string, required)
   - 'account-id' (string, required)
 - url parameters
-  - none
-- url queries
-  - none
-- body (json string)
-  - none
+  - id (string, required)
 
 ## Response
 - code: 200
-  - description: account was deactivated
-  - body (json string)
-    - none
+  - description: account deactivated
 - code: 401
-  - description: user was not authorized
-  - body (json string)
-    - none
+  - description: client not authorized
+- code: 403
+  - description: client forbidden to deactivate account
 - code: 404
-  - description: the account could not be found
-  - body (json string)
-    - none
+  - description: account not found
 - code: 409
-  - description: the account was already deactivated
-  - body (json string)
-    - error (array, required)
-      - 'email is already in use' (string, optional)
-      - 'username is already in use' (string, optional)
+  - description: account already deactivated
+- code: 422
+  - description: response url parameter invalid
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body (json string)
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error

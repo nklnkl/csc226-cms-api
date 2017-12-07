@@ -1,5 +1,5 @@
 # Update Account
-Submits data to register an account to the database.
+Updates account from database.
 
 ## Request
 - url
@@ -10,47 +10,34 @@ Submits data to register an account to the database.
   - 'Content-Type' : 'application/json'
   - 'session-id' (string, required)
   - 'account-id' (string, required)
-- url parameters
-  - none
-- url queries
-  - none
-- body (json string)
+- body
   - email (string, optional)
   - password (string, optional)
   - username (string, optional)
 
 ## Response
 - code: 200
-  - description: account was updated
-  - body (json string)
-    - none
+  - description: account updated
 - code: 401
-  - description: user was not authorized
-  - body (json string)
-    - none
+  - description: client not authorized
+- code: 403
+  - description: client forbidden to update account
 - code: 404
-  - description: the account could not be found
-  - body (json string)
-    - none
+  - description: account not found
 - code: 409
-  - description: the email or username was already in use
-  - body (json string)
+  - description: email or username already in use
+  - body
     - error (array, required)
-      - 'email is already in use' (string, optional)
-      - 'username is already in use' (string, optional)
+      - 1 (string, optional): email already in use
+      - 2 (string, optional): username already in use
 - code: 410
-  - description: account could not be updated due to status
-  - body (json string)
-    - none
+  - description: account inactive
 - code: 422
-  - description: the data given by the client did not pass validation
-  - body (json string)
+  - description: request body data invalid
+  - body
     - error (array, required)
-      - 'email invalid' (string, optional)
-      - 'password invalid' (string, optional)
-      - 'username invalid' (string, optional)
+      - 1 (string, optional): email invalid
+      - 2 (string, optional): password invalid
+      - 3 (string, optional): username invalid
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body (json string)
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error

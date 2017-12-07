@@ -1,5 +1,5 @@
 # Create Account
-Submits data to register an account to the database.
+Submits account to database.
 
 ## Request
 - url
@@ -8,35 +8,26 @@ Submits data to register an account to the database.
   - POST
 - headers
   - 'Content-Type' : 'application/json'
-- url parameters
-  - none
-- url queries
-  - none
-- body (json string)
+- body
   - email (string, required)
   - password (string, required)
   - username (string, required)
 
 ## Response
 - code: 200
-  - description: an account was registered
-  - body (json string)
-    - none
+  - description: account registered
 - code: 409
-  - description: the email or username is already in use
-  - body (json string)
-    - error (array, required)
-      - 'email is already in use' (string, optional)
-      - 'username is already in use' (string, optional)
+  - description: email or username already in use
+  - body
+    - error (integer array, required)
+      - 1 (optional): email already in use
+      - 2 (optional): username already in use
 - code: 422
-  - description: the data given by the client did not pass validation
-  - body (json string)
-    - error (array, required)
-      - 'email invalid' (string, optional)
-      - 'password invalid' (string, optional)
-      - 'username invalid' (string, optional)
+  - description: request body data invalid
+  - body
+    - error (integer array, required)
+      - 1 (optional): email invalid
+      - 2 (optional): password invalid
+      - 3 (optional): username invalid
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body (json string)
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error
