@@ -15,7 +15,7 @@ The structure of a user account.
   - type: integer
   - values
     - 0: active
-    - 1: deactivated
+    - 1: inactive
   - description: the current status of the account
 - email
   - type: string
