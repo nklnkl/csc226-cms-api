@@ -1,5 +1,5 @@
 # Account
-The structure of a user's account.
+The structure of a user account.
 
 ## Properties
 - id
