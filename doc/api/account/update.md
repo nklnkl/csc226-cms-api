@@ -5,7 +5,7 @@ Submits data to register an account to the database.
 - url
   - api/account
 - method
-  - POST
+  - PATCH
 - headers
   - 'Content-Type' : 'application/json'
   - 'session-id' (string, required)
