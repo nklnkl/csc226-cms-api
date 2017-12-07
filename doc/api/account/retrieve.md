@@ -31,7 +31,7 @@ the url to query the account from the database.
   - body (json string)
     - none
 - code: 410
-  - description: an account was found, but can not be given
+  - description: an account was found, but can not be given due to status
   - body (json string)
     - none
 - code: 500

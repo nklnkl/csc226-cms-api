@@ -27,7 +27,7 @@ Deactivates an account from the database.
   - body (json string)
     - none
 - code: 409
-  - description: the account was already deactivate
+  - description: the account was already deactivated
   - body (json string)
     - error (array, required)
       - 'email is already in use' (string, optional)

@@ -34,6 +34,10 @@ Submits data to register an account to the database.
     - error (array, required)
       - 'email is already in use' (string, optional)
       - 'username is already in use' (string, optional)
+- code: 410
+  - description: account could not be updated due to status
+  - body (json string)
+    - none
 - code: 422
   - description: the data given by the client did not pass validation
   - body (json string)
