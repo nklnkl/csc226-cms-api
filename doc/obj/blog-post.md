@@ -1,5 +1,5 @@
-# Blog
-The structure of a blog.
+# Blog Post
+The structure of a blog post.
 
 ## Properties
 - id
@@ -18,8 +18,8 @@ The structure of a blog.
 - title
   - type: string
   - max: 255
-  - description: used to title a blog
+  - description: used to title a blog post
 - body
   - type: string
   - max: 5000
-  - description: used as the content of the blog
+  - description: used as the content of the blog post
