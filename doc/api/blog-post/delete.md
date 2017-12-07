@@ -3,15 +3,15 @@ Delete a blog from the database.
 
 ## Request
 - url
-  - api/blog-post
+  - api/blog-post/:id
 - method
   - DELETE
 - headers
   - 'Content-Type' : 'application/json'
   - 'session-id' (string, required)
-  - 'blog post-id' (string, required)
+  - 'account-id' (string, required)
 - url parameters
-  - none
+  - id (string, required)
 - url queries
   - none
 - body (json string)
@@ -23,7 +23,11 @@ Delete a blog from the database.
   - body (json string)
     - none
 - code: 401
-  - description: user was not authorized
+  - description: client was not authorized
+  - body (json string)
+    - none
+- code: 403
+  - description: client not allowed to delete this blog post
   - body (json string)
     - none
 - code: 404
