@@ -21,7 +21,7 @@ Authorizes a user for a valid session to the database.
   - description: a session was created
   - body (json string)
     - session-id (string, required)
-    - user-id (string, required)
+    - account-id (string, required)
 - code: 401
   - description: the credentials given by the client were incorrect
   - body (json strong)

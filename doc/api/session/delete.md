@@ -9,7 +9,7 @@ Deletes a session from the database.
 - headers
   - 'Content-Type' : 'application/json'
   - 'session-id' (string, required)
-  - 'user-id' (string, required)
+  - 'account-id' (string, required)
 - url parameters
   - none
 - url queries
