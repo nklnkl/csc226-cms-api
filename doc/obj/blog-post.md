@@ -23,3 +23,8 @@ The structure of a blog post.
   - type: string
   - max: 5000
   - description: used as the content of the blog post
+- privacy
+  - type: integer
+    - values
+      - 0: public
+      - 1: private
