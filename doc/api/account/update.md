@@ -28,6 +28,10 @@ Submits data to register an account to the database.
   - description: user was not authorized
   - body (json string)
     - none
+- code: 404
+  - description: the account could not be found
+  - body (json string)
+    - none
 - code: 409
   - description: the email or username was already in use
   - body (json string)

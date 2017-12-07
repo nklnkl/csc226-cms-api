@@ -26,6 +26,10 @@ Deactivates an account from the database.
   - description: user was not authorized
   - body (json string)
     - none
+- code: 404
+  - description: the account could not be found
+  - body (json string)
+    - none
 - code: 409
   - description: the account was already deactivated
   - body (json string)
