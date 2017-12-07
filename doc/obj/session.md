@@ -1,17 +1,16 @@
-# Account
-The structure of a user session.
+# Session
+Structure of session.
 
 ## Properties
 - id
   - type: string
-  - description: unique identifier for the resource
+  - description: unique identifier for session
 - created
   - type: integer
-  - description: used to mark when this resource was created since epoch
+  - description: when session was created since epoch
 - updated
   - type: integer
-  - description: used to mark when this resource was last updated since epoch
+  - description: when session was last updated since epoch
 - account_id
   - type: string
-  - description: used to identify which account this resource is associated
-    with
+  - description: identify account session belongs to

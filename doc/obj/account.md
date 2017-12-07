@@ -1,28 +1,34 @@
 # Account
-The structure of a user account.
+Structure of account.
 
 ## Properties
 - id
   - type: string
-  - description: unique identifier for the resource
+  - description: unique identifier for account
 - created
   - type: integer
-  - description: when this resource was created since epoch
+  - description: when account was created since epoch
 - updated
   - type: integer
-  - description: when this resource was last updated since epoch
+  - description: when account was last updated since epoch
 - status
   - type: integer
   - values
     - 0: active
     - 1: inactive
-  - description: the current status of the account
+  - description: status of account
 - email
   - type: string
-  - description: authenticates a user for a session
+  - description: authenticates user for session
 - password
   - type: string
-  - description: authenticates a user for a session, password is encrypted prior to database submission
+  - description: authenticates user for session, password encrypted prior database submission
 - username
   - type: string
-  - description: used as a public handler for a user's account
+  - description: public handle for account
+- bio
+  - type: string
+  - description: bio of account
+- location
+  - type: string
+  - description: location of account
