@@ -1,9 +1,9 @@
 # Delete Session
-Deletes a session from the database.
+Deletes session from database.
 
 ## Request
 - url
-  - api/session
+  - api/session/:id
 - method
   - DELETE
 - headers
@@ -11,27 +11,16 @@ Deletes a session from the database.
   - 'session-id' (string, required)
   - 'account-id' (string, required)
 - url parameters
-  - none
-- url queries
-  - none
-- body (json string)
-  - none
+  - id (string, required)
 
 ## Response
 - code: 200
-  - description: session was deleted
-  - body (json string)
-    - none
+  - description: session deleted
 - code: 401
-  - description: user was not authorized
-  - body (json string)
-    - none
+  - description: client not authorized
+- code: 403
+  - description: client forbidden to delete session
 - code: 404
   - description: session was not found
-  - body (json string)
-    - none
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body (json string)
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error

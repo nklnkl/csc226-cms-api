@@ -15,13 +15,13 @@ the url to query the blog post from the database.
   - id (string, required)
 - url queries
   - none
-- body (json string)
+- body
   - none
 
 ## Response
 - code: 200
   - description: blog post was found
-  - body (json string)
+  - body
     - blog-post (key value object, required)
       - title (string, required)
       - body (string, required)
@@ -32,14 +32,14 @@ the url to query the blog post from the database.
       - updated (integer, required)
 - code: 403
   - description: blog was found, but can not be given due to privacy
-  - body (json string)
+  - body
     - none
 - code: 404
   - description: blog post was not found
-  - body (json string)
+  - body
     - none
 - code: 500
   - description: an unexpected server error has occurred and has been reported
-  - body (json string)
+  - body
     - error (array, required)
       - 'server error, please try again later' (string, required)

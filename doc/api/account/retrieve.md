@@ -1,5 +1,5 @@
 # Retrieve Account
-Retrieves account from database. Uses 'id' parameter in url to query account from database.
+Retrieves account from database.
 
 ## Request
 - url

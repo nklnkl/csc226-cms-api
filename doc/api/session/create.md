@@ -1,5 +1,5 @@
 # Create Session
-Authorizes a user for a valid session to the database.
+Submits session to database.
 
 ## Request
 - url
@@ -8,32 +8,25 @@ Authorizes a user for a valid session to the database.
   - POST
 - headers
   - 'Content-Type' : 'application/json'
-- url parameters
-  - none
-- url queries
-  - none
-- body (json string)
+- body
   - email (string, required)
   - password (string, required)
 
 ## Response
 - code: 200
-  - description: a session was created
-  - body (json string)
+  - description: session created
+  - body
     - session-id (string, required)
     - account-id (string, required)
 - code: 401
-  - description: the credentials given by the client were incorrect
-  - body (json strong)
-    - none
+  - description: request body data incorrect
+- code: 403
+  - description: client forbidden to create session
 - code: 422
-  - description: the data given by the client did not pass validation
-  - body (json string)
+  - description: request body data invalid
+  - body
     - error (array, required)
-      - 'email invalid' (string, optional)
-      - 'password invalid' (string, optional)
+      - 1 (string, optional): email invalid
+      - 2 (string, optional): password invalid
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body (json string)
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error

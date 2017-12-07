@@ -1,5 +1,5 @@
 # Create Blog Post
-Submits blog post to the database.
+Submits blog post to database.
 
 ## Request
 - url
@@ -10,36 +10,22 @@ Submits blog post to the database.
   - 'Content-Type' : 'application/json'
   - 'session-id' (string, required)
   - 'account-id' (string, required)
-- url parameters
-  - none
-- url queries
-  - none
-- body (json string)
+- body
   - title (string, required)
   - body (string, required)
 
 ## Response
 - code: 200
-  - description: blog post was registered
-  - body (json string)
-    - none
+  - description: blog post registered
 - code: 401
-  - description: client was not authorized
-  - body (json string)
-    - none
+  - description: client not authorized
 - code: 409
-  - description: account already has a blog post with the same title
-  - body (json string)
-    - error (array, required)
-      - 'you already have a blog post with the same title' (string, required)
+  - description: account has blog post with same title
 - code: 422
-  - description: the data given by the client did not pass validation
-  - body (json string)
+  - description: request body data invalid
+  - body
     - error (array, required)
-      - 'blog post too long' (string, optional)
-      - 'blog title too long' (string, optional)
+      - 1 (string, optional): title invalid
+      - 2 (string, optional): body invalid
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body (json string)
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error
