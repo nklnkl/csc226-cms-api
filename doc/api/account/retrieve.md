@@ -8,6 +8,8 @@ Retrieves account from database.
   - GET
 - headers
   - 'Content-Type' : 'application/json'
+  - 'session-id' (string, optional)
+  - 'account-id' (string, optional)
 - url parameters
   - id (string, required)
 
@@ -16,14 +18,19 @@ Retrieves account from database.
   - description: account found
   - body
     - account (object, required)
-      - email (string, required)
       - username (string, required)
+      - bio (string, required)
+      - location (string, required)
       - id (string, required)
       - created (integer, required)
       - updated (integer, required)
+      - email (string, only if account owned)
 - code: 404
   - description: account not found
 - code: 410
-  - description: account found, but account inactive
+  - description: target account inactive
+  - conditions
+    - target account inactive
+    - client not admin
 - code: 500
   - description: server error

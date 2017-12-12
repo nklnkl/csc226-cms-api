@@ -1,9 +1,9 @@
-# Update Blog Post
-Updates a blog from the database.
+# Update comment
+Updates comment from database.
 
 ## Request
 - url
-  - api/blog-post/:id
+  - api/comment/:id
 - method
   - PATCH
 - headers
@@ -18,29 +18,24 @@ Updates a blog from the database.
 
 ## Response
 - code: 200
-  - description: blog post was updated
+  - description: comment was updated
 - code: 401
   - description: client was not authorized
   - conditions
     - session-id account-id combo invalid
 - code: 403
-  - description: client not allowed to update this blog post
+  - description: client not allowed to update this comment
   - conditions:
-    - blog post not owned
+    - comment not owned
     - account inactive
     - client not admin
 - code: 404
-  - description: blog post was not found
-- code: 409
-  - description: account already has a blog post with the same title
-  - body
-    - error (array, required)
-      - 'you already have a blog post with the same title' (string, required)
+  - description: comment was not found
 - code: 422
-  - description: the data given by the client did not pass validation
+  - description: request body data invalid
   - body
     - error (array, required)
-      - 1 (string, optional): title invalid
+      - 1 (string, optional): blog post id invalid
       - 2 (string, optional): body invalid
 - code: 500
   - description: server error

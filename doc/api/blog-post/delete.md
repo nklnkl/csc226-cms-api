@@ -12,30 +12,21 @@ Delete a blog from the database.
   - 'account-id' (string, required)
 - url parameters
   - id (string, required)
-- url queries
-  - none
-- body
-  - none
 
 ## Response
 - code: 200
   - description: blog post was deleted
-  - body
-    - none
 - code: 401
   - description: client was not authorized
-  - body
-    - none
+  - conditions
+    - session-id account-id combo invalid
 - code: 403
   - description: client not allowed to delete this blog post
-  - body
-    - none
+  - conditions:
+    - account inactive
+    - blog post not owned
+    - client not admin
 - code: 404
   - description: the blog post could not be found
-  - body
-    - none
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error

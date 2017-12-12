@@ -13,10 +13,6 @@ the url to query the blog post from the database.
   - 'account-id' (string, optional)
 - url parameters
   - id (string, required)
-- url queries
-  - none
-- body
-  - none
 
 ## Response
 - code: 200
@@ -31,15 +27,11 @@ the url to query the blog post from the database.
       - created (integer, required)
       - updated (integer, required)
 - code: 403
-  - description: blog was found, but can not be given due to privacy
-  - body
-    - none
+  - description: client not allowed to retrieve this blog post
+  - conditions:
+    - blog post is private and not owned
+    - client not admin
 - code: 404
   - description: blog post was not found
-  - body
-    - none
 - code: 500
-  - description: an unexpected server error has occurred and has been reported
-  - body
-    - error (array, required)
-      - 'server error, please try again later' (string, required)
+  - description: server error

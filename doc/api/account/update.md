@@ -3,7 +3,7 @@ Updates account from database.
 
 ## Request
 - url
-  - api/account
+  - api/account/:id
 - method
   - PATCH
 - headers
@@ -14,14 +14,24 @@ Updates account from database.
   - email (string, optional)
   - password (string, optional)
   - username (string, optional)
+  - bio (string, optional)
+  - location (string, optional)
+- url parameters
+  - id (string, required)
 
 ## Response
 - code: 200
   - description: account updated
 - code: 401
   - description: client not authorized
+  - conditions
+    - session-id account-id combo invalid
 - code: 403
   - description: client forbidden to update account
+  - conditions:
+    - target account not owned
+    - client account inactive
+    - client not admin
 - code: 404
   - description: account not found
 - code: 409
@@ -32,6 +42,9 @@ Updates account from database.
       - 2 (string, optional): username already in use
 - code: 410
   - description: account inactive
+  - conditions:
+    - target account inactive
+    - client not admin
 - code: 422
   - description: request body data invalid
   - body
@@ -39,5 +52,7 @@ Updates account from database.
       - 1 (string, optional): email invalid
       - 2 (string, optional): password invalid
       - 3 (string, optional): username invalid
+      - 4 (string, optional): bio invalid
+      - 5 (string, optional): location invalid
 - code: 500
   - description: server error

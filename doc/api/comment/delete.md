@@ -1,9 +1,9 @@
-# Deactivate Account
-Deactivates account from database.
+# Delete comment
+Delete comment from database.
 
 ## Request
 - url
-  - api/account/:id
+  - api/comment/:id
 - method
   - DELETE
 - headers
@@ -15,20 +15,18 @@ Deactivates account from database.
 
 ## Response
 - code: 200
-  - description: account deactivated
+  - description: comment was deleted
 - code: 401
-  - description: client not authorized
+  - description: client was not authorized
   - conditions
     - session-id account-id combo invalid
 - code: 403
-  - description: client forbidden to deactivate account
+  - description: client not allowed to delete this comment
   - conditions:
-    - target account not owned
-    - client account inactive
+    - comment not owned
+    - account inactive
     - client not admin
 - code: 404
-  - description: account not found
-- code: 409
-  - description: account already deactivated
+  - description: the comment could not be found
 - code: 500
   - description: server error

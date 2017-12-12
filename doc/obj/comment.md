@@ -14,9 +14,9 @@ Structure of comment.
 - account_id
   - type: string
   - description: identify account comment belongs to
-- blog_id
+- blog_post_id
   - type: string
-  - description: identify blog comment belongs to
+  - description: identify blog post comment belongs to
 - body
   - type: string
   - max: 5000

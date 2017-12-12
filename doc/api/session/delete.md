@@ -18,8 +18,13 @@ Deletes session from database.
   - description: session deleted
 - code: 401
   - description: client not authorized
+  - conditions
+    - session-id account-id combo invalid
 - code: 403
   - description: client forbidden to delete session
+  - conditions:
+    - session not owned
+    - client not admin
 - code: 404
   - description: session was not found
 - code: 500
