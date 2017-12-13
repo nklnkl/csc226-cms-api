@@ -4,7 +4,7 @@
     },
     "scripts": {
       "start": [
-        "php -t ./www -S localhost:10010"
+        "winpty php -t ./www -S localhost:10010"
       ]
     }
 }

@@ -1,20 +1,94 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use \Interop\Container\ContainerInterface as ContainerInterface;
 
 class Session_Service implements Resource_Router {
-  public static function create (Request $request, Response $response) {
-    $data = array('name' => 'niko', 'age' => 25);
-    $newResponse = $response->withJson($data);
-    return $newResponse;
+  protected $container;
+  protected $db;
+
+  // constructor receives container instance
+  public function __construct(ContainerInterface $container) {
+    $this->container = $container;
+    $this->db = $container->get('db');
   }
-  public static function retrieve (Request $request, Response $response) {
+
+  public function create (Request $request, Response $response) {
+    // Parse body.
+    $login = $request->getParsedBody();
+
+    // VALIDATE LOGIN
+
+    // If login is missing.
+    if(!$login['password'] || !$login['email']) {
+      $response = $response->withStatus(401);
+      return $response;
+    }
+
+    // Input.
+    $email = $login['email'];
+    $password = $login['password'];
+
+    // SQL.
+    $statement = NULL;
+    try {
+      $sql = "SELECT id, email, password, status FROM accounts WHERE email = '$email' LIMIT 1";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      $response = $response->withStatus(500);
+      return $response;
+    }
+
+    // If no account found.
+    if ($statement->rowCount() == 0) {
+      $response = $response->withStatus(401);
+      return $response;
+    }
+
+    // If password does not match.
+    $account = $statement->fetch();
+    if (!password_verify($password, $account['password'])) {
+      $response = $response->withStatus(401);
+      return $response;
+    }
+
+    // If the account is inactive.
+    if ($account['status'] == 1) {
+      $response = $response->withStatus(403);
+      return $response;
+    }
+
+    // CREATE SESSION
+
+    // Input.
+    $id = uniqid();
+    $created = time();
+    $updated = $created;
+    $account_id = $account['id'];
+
+    // SQL.
+    $statement = NULL;
+    try {
+      $sql = "INSERT INTO sessions (id, created, updated, account_id) VALUES
+      ('$id', '$created', '$updated', '$account_id')";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      $response = $response->withStatus(500);
+      return $response;
+    }
+
+    // Success!
+    $session = array('session-id' => $id, 'account-id' => $account['id']);
+    $response = $response->withJson($session);
+    return $response;
   }
-  public static function update (Request $request, Response $response) {
+  public function retrieve (Request $request, Response $response) {
   }
-  public static function delete (Request $request, Response $response) {
+  public function update (Request $request, Response $response) {
   }
-  public static function list (Request $request, Response $response) {
+  public function delete (Request $request, Response $response) {
+  }
+  public function list (Request $request, Response $response) {
   }
 }
 
