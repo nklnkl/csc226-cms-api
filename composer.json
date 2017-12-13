@@ -1,5 +1,10 @@
 {
     "require": {
         "slim/slim": "^3.0"
+    },
+    "scripts": {
+      "start": [
+        "php -t ./www -S localhost:10010"
+      ]
     }
 }

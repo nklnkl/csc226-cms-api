@@ -1,9 +1,8 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-require 'router.php';
 
-class AccountService implements ResourceRouter {
+class Blog_Post_Service implements Resource_Router {
   public static function create (Request $request, Response $response) {
     $data = array('name' => 'niko', 'age' => 25);
     $newResponse = $response->withJson($data);
