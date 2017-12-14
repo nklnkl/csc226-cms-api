@@ -31,7 +31,7 @@ class Blog_Post_Service implements Resource_Router {
     $blog_post = $request->getParsedBody();
 
     // Validate input.
-    if (!$blog_post['title'] || !$blog_post['body'] || !$blog_post['privacy']) {
+    if (!isset($blog_post['title']) || !isset($blog_post['body']) || !isset($blog_post['privacy'])) {
       $response = $response->withStatus(422);
       return $response;
     }
@@ -40,7 +40,7 @@ class Blog_Post_Service implements Resource_Router {
     $id = uniqid();
     $created = time();
     $updated = $created;
-    $account_id = $request->getHeader('account-id');
+    $account_id = $request->getHeader('account-id')[0];
     $title = $blog_post['title'];
     $body = $blog_post['body'];
     $privacy = $blog_post['privacy'];
@@ -60,16 +60,20 @@ class Blog_Post_Service implements Resource_Router {
       '$created',
       '$updated',
       '$account_id',
-      '$title',
-      '$body',
+      :title,
+      :body,
       '$privacy')
     ";
 
     // Try to execute sql.
     $statement = NULL;
     try {
-      $statement = $this->db->query($sql);
+      $statement = $this->db->prepare($sql);
+      $statement->bindParam(':title', $title);
+      $statement->bindParam(':body', $body);
+      $statement->execute();
     } catch (PDOException $e) {
+      throw($e);
       if ($e->getCode() == '23000') {
         $response = $response->withStatus(409);
         return $response;
@@ -84,13 +88,15 @@ class Blog_Post_Service implements Resource_Router {
 
   public function retrieve (Request $request, Response $response) {
 
+    $targetId = $request->getAttribute('id');
+
     // Try SQL.
     $statement = NULL;
     try {
       $sql = "
       SELECT * FROM blog_posts
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -111,7 +117,7 @@ class Blog_Post_Service implements Resource_Router {
 
     // If blog_post is private, not owned, client is not admin.
     if ($blog_post['privacy'] == 1
-        && $request->getHeader('account-id') != $blog_post['account_id']
+        && $request->getHeader('account-id')[0] != $blog_post['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;
@@ -131,12 +137,13 @@ class Blog_Post_Service implements Resource_Router {
     }
 
     // If not admin, Try sql query to check ownership of blog post.
+    $targetId = $request->getAttribute('id');
     $statement = NULL;
     try {
       $sql = "
       SELECT * FROM blog_posts
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -156,7 +163,7 @@ class Blog_Post_Service implements Resource_Router {
     $blog_post = $statement->fetch();
 
     // If blog_post is not owned and client is not admin.
-    if ($request->getHeader('account-id') != $blog_post['account_id']
+    if ($request->getHeader('account-id')[0] != $blog_post['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;
@@ -165,10 +172,10 @@ class Blog_Post_Service implements Resource_Router {
     // Parse update body.
     $update = $request->getParsedBody();
 
-    $updated = $created;
-    $title = $blog_post['title'];
-    $body = $blog_post['body'];
-    $privacy = $blog_post['privacy'];
+    $updated = time();
+    $title = $update['title'];
+    $body = $update['body'];
+    $privacy = $update['privacy'];
 
     // Try Update SQL.
     $statement = NULL;
@@ -176,18 +183,18 @@ class Blog_Post_Service implements Resource_Router {
       $sql = "
       UPDATE blog_posts
       SET updated = $updated,
-      SET title = CASE
-        WHEN $title THEN $title ELSE title END,
-      SET body = CASE
-        WHEN $body THEN $body ELSE body END,
-      SET privacy = CASE
-        WHEN $privacy THEN $privacy ELSE privacy END
-      WHERE id = '$request->getAttribute('id')'
-      LIMIT 1
+      title = IF(:title = '', title, :title),
+      body = IF(:body = '', body, :body),
+      privacy = IF('$privacy' = '', privacy, '$privacy')
+      WHERE id = '$targetId'
       ";
-      $statement = $this->db->query($sql);
+      $statement = $this->db->prepare($sql);
+      $statement->bindParam(':title', $title);
+      $statement->bindParam(':body', $body);
+      $statement->execute();
     } catch (PDOexception $e) {
       // If duplicate error occurs, return early.
+      throw($e);
       if ($e->getCode() == '23000') {
         $response = $response->withStatus(409);
         return $response;
@@ -215,12 +222,13 @@ class Blog_Post_Service implements Resource_Router {
     }
 
     // If not admin, Try sql query to check ownership of blog post.
+    $targetId = $request->getAttribute('id');
     $statement = NULL;
     try {
       $sql = "
       SELECT * FROM blog_posts
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -240,7 +248,7 @@ class Blog_Post_Service implements Resource_Router {
     $blog_post = $statement->fetch();
 
     // If blog_post not owned, and client is not admin.
-    if ($request->getHeader('account-id') != $blog_post['account_id']
+    if ($request->getHeader('account-id')[0] != $blog_post['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;
@@ -248,11 +256,12 @@ class Blog_Post_Service implements Resource_Router {
 
     // Try SQL.
     $statement = NULL;
+    $targetId = $request->getAttribute('id');
     try {
       $sql = "
-      DELETE blog_posts
+      DELETE FROM blog_posts
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -292,11 +301,11 @@ class Blog_Post_Service implements Resource_Router {
         SELECT *
         FROM blog_posts
         WHERE
-          username = '$account_id'
+          account_id = '$account_id'
           AND
           privacy = 0
-        LIMIT $offset, $size
         ORDER BY created
+        LIMIT $offset, $size
         ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {
@@ -313,11 +322,12 @@ class Blog_Post_Service implements Resource_Router {
         FROM blog_posts
         WHERE
           privacy = 0
-        LIMIT $offset, $size
         ORDER BY created
+        LIMIT $offset, $size
         ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {
+        throw($e);
         // If internal database error, return early.
         $response = $response->withStatus(500);
         return $response;
@@ -362,8 +372,8 @@ class Blog_Post_Service implements Resource_Router {
           title LIKE '$title%'
           AND
           privacy = 0
-        LIMIT $offset, $size
         ORDER BY created
+        LIMIT $offset, $size
         ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {
@@ -380,8 +390,8 @@ class Blog_Post_Service implements Resource_Router {
         FROM blog_posts
         WHERE
           privacy = 0
-        LIMIT $offset, $size
         ORDER BY created
+        LIMIT $offset, $size
         ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {

@@ -189,7 +189,6 @@ class Account_Service implements Resource_Router {
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       // If duplicate error occurs, return early.
-      throw($e);
       if ($e->getCode() == '23000') {
         $response = $response->withStatus(409);
         return $response;

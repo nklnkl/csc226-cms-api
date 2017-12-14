@@ -110,12 +110,13 @@ class Session_Service implements Resource_Router {
     }
 
     // Try SQL.
+    $targetId = $request->getAttribute('id');
     $statement = NULL;
     try {
       $sql = "
-      DELETE sessions
+      DELETE sessions FROM
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);

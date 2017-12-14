@@ -104,6 +104,7 @@ $app->get('/api/blog-post/{id}', \Blog_Post_Service::class . ':retrieve');
 $app->patch('/api/blog-post/{id}', \Blog_Post_Service::class . ':update');
 $app->delete('/api/blog-post/{id}', \Blog_Post_Service::class . ':delete');
 $app->get('/api/blog-post', \Blog_Post_Service::class . ':list');
+$app->get('/api/blog-post/search/content', \Blog_Post_Service::class . ':search');
 
 $app->post('/api/comment', \Comment_Service::class . ':create');
 $app->get('/api/comment/{id}', \Comment_Service::class . ':retrieve');
