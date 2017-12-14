@@ -36,10 +36,28 @@ class Account_Service implements Resource_Router {
     $location = '';
 
     // SQL.
-    $sql = "INSERT INTO accounts (id, created, updated, status, email,
-    password, username, bio, location)
-    VALUES ('$id', '$created', '$updated', '$status', '$email', '$password',
-    '$username', '$bio', '$location')";
+    $sql = "
+    INSERT INTO accounts
+      (id,
+      created,
+      updated,
+      status,
+      email,
+      password,
+      username,
+      bio,
+      location)
+    VALUES
+      ('$id',
+      '$created',
+      '$updated',
+      '$status',
+      '$email',
+      '$password',
+      '$username',
+      '$bio',
+      '$location')
+    ";
 
     // Try to execute sql.
     $statement = NULL;
@@ -63,7 +81,12 @@ class Account_Service implements Resource_Router {
     // Try SQL.
     $statement = NULL;
     try {
-      $sql = "SELECT * FROM accounts WHERE id = '$request->getAttribute('id')' LIMIT 1";
+      $sql = "
+      SELECT * FROM accounts
+      WHERE
+        id = '$request->getAttribute('id')'
+      LIMIT 1
+      ";
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       // If internal database error, return early.
@@ -145,7 +168,24 @@ class Account_Service implements Resource_Router {
     // Try Update SQL.
     $statement = NULL;
     try {
-      $sql = "SELECT * FROM accounts WHERE id = '$request->getAttribute('id')' LIMIT 1";
+      $sql = "
+      UPDATE accounts
+      SET updated = $updated,
+      SET email = CASE
+        WHEN $email THEN $email ELSE email END,
+      SET password = CASE
+        WHEN $password THEN $password ELSE password END,
+      SET username = CASE
+        WHEN $username THEN $username ELSE username END,
+      SET bio = CASE
+        WHEN $bio THEN $bio ELSE bio END,
+      SET location = CASE
+        WHEN $location THEN $location ELSE location END,
+      SET status = CASE
+        WHEN $status THEN $status ELSE status END,
+      WHERE id = '$request->getAttribute('id')'
+      LIMIT 1
+      ";
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       // If duplicate error occurs, return early.
@@ -185,7 +225,13 @@ class Account_Service implements Resource_Router {
     // Try SQL.
     $statement = NULL;
     try {
-      $sql = "UPDATE accounts SET status = 1 WHERE id = '$request->getAttribute('id')' LIMIT 1";
+      $sql = "
+      UPDATE accounts
+      SET status = 1
+      WHERE
+        id = '$request->getAttribute('id')'
+      LIMIT 1
+      ";
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       $response = $response->withStatus(500);
@@ -220,7 +266,14 @@ class Account_Service implements Resource_Router {
     // Try SQL with query param, by like username, limited.
     if ($username) {
       try {
-        $sql = "SELECT id, username FROM accounts WHERE username LIKE '$username%' LIMIT $offset, $size ORDER BY username";
+        $sql = "
+        SELECT id, username
+        FROM accounts
+        WHERE
+          username LIKE '$username%'
+        LIMIT $offset, $size
+        ORDER BY username
+        ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {
         // If internal database error, return early.
@@ -231,7 +284,12 @@ class Account_Service implements Resource_Router {
     // Try SQL without query param, get all, limited.
     else {
       try {
-        $sql = "SELECT id, username FROM accounts LIMIT $offset, $size ORDER BY username";
+        $sql = "
+        SELECT id, username
+        FROM accounts
+        LIMIT $offset, $size
+        ORDER BY username
+        ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {
         // If internal database error, return early.
