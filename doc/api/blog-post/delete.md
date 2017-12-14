@@ -24,6 +24,7 @@ Delete a blog from the database.
   - description: client not allowed to delete this blog post
   - conditions:
     - blog post not owned
+    - client not admin
 - code: 404
   - description: the blog post could not be found
 - code: 500
