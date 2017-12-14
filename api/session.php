@@ -102,8 +102,32 @@ class Session_Service implements Resource_Router {
       return $response;
     }
 
+    // Try SQL to check ownership of session.
+    $targetId = $request->getAttribute('id');
+    $statement = NULL;
+    try {
+      $sql = "
+      SELECT * FROM sessions
+      WHERE
+        id = '$targetId'
+      LIMIT 1
+      ";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      $response = $response->withStatus(500);
+      return $response;
+    }
+    // If nothing was found.
+    if ($statement->rowCount() == 0) {
+      $response = $response->withStatus(404);
+      return $response;
+    }
+
+    // Get session if found.
+    $session = $statement->fetch();
+
     // If client is not owner AND not admin, return early.
-    $owner = ($request->getAttribute('id') == $request->getHeader('session-id'));
+    $owner = ( $session['account_id'] == $request->getHeader('account-id')[0] );
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;
@@ -114,7 +138,7 @@ class Session_Service implements Resource_Router {
     $statement = NULL;
     try {
       $sql = "
-      DELETE sessions FROM
+      DELETE FROM sessions
       WHERE
         id = '$targetId'
       LIMIT 1
