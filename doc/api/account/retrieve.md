@@ -31,6 +31,5 @@ Retrieves account from database.
   - description: target account inactive
   - conditions
     - target account inactive
-    - client not admin
 - code: 500
   - description: server error

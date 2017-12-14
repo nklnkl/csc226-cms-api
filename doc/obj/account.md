@@ -17,6 +17,11 @@ Structure of account.
     - 0: active
     - 1: inactive
   - description: status of account
+- role
+  - type: integer
+  - values
+    - 0: member
+    - 1: admin
 - email
   - type: string
   - description: authenticates user for session

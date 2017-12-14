@@ -59,29 +59,9 @@ class Account_Service implements Resource_Router {
   }
 
   public function retrieve (Request $request, Response $response) {
+
     // Get target id.
     $id = $request->getAttribute('id');
-
-    // If session-id account-id headers are in place, query it to validate session.
-    $session = false;
-    $account_id = NULL;
-    $session_id = NULL;
-    if ($request->hasHeader('account-id') && $request->hasHeader('session-id')) {
-      $account_id = $request->hasHeader('account-id');
-      $session_id = $request->hasHeader('session-id');
-      // Try SQL.
-      $statement = NULL;
-      try {
-        $sql = "SELECT * FROM sessions WHERE id = '$session_id' AND account_id = '$account_id' LIMIT 1";
-        $statement = $this->db->query($sql);
-      } catch (PDOexception $e) {
-        $response = $response->withStatus(500);
-        return $response;
-      }
-      // If session matched
-      if ($statement->rowCount() > 0)
-        $session = true;
-    }
 
     // Try SQL.
     $statement = NULL;
@@ -109,19 +89,36 @@ class Account_Service implements Resource_Router {
     // Remove private data from response.
     unset($account['password']);
     unset($account['status']);
+
     // Remove email from response if not valid session or if not owned.
-    if (!session)
+    if ($request->getAttribute('session') == false)
       unset($account['email']);
-    if ($id != $account_id)
+    if ($id != $request->getHeader('account-id'))
       unset($account['email']);
 
     // Success!
     $response = $response->withJson($account);
     return $response;
+
   }
 
   public function update (Request $request, Response $response) {
+
+    // Check session
+    if ($request->getAttribute('session') == false) {
+      $response = $response->withStatus(401);
+      return $response;
+    }
+
+    // Get target id and check for ownership.
+    if ($request->getAttribute('id') != $request->getHeader('account-id')) {
+      $response = $response->withStatus(403);
+      return $response;
+    }
+
+    // Get target id.
     $id = $request->getAttribute('id');
+
     // Parse body.
     $account = $request->getParsedBody();
 
@@ -134,12 +131,70 @@ class Account_Service implements Resource_Router {
     $bio = '';
     $location = '';
 
-    // SQL.
+    // Try SQL.
+    $statement = NULL;
+    try {
+      $sql = "SELECT * FROM accounts WHERE id = '$id' LIMIT 1";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      $response = $response->withStatus(500);
+      return $response;
+    }
+
+    // If nothing found.
+    if ($statement->rowCount() == 0) {
+      $response = $response->withStatus(404);
+      return $response;
+    }
+
+    // If account is inactive.
+    $account = $statement->fetch();
+    if ($account['status'] == 1) {
+      $response = $response->withStatus(410);
+      return $response;
+    }
   }
+
   public function delete (Request $request, Response $response) {
+
+    // Check session
+    if ($request->getAttribute('session') == false) {
+      $response = $response->withStatus(401);
+      return $response;
+    }
+
+    // Get target id and check for ownership.
+    if ($request->getAttribute('id') != $request->getHeader('account-id')) {
+      $response = $response->withStatus(403);
+      return $response;
+    }
+
+    // Get target id.
     $id = $request->getAttribute('id');
+
+    // Try SQL.
+    $statement = NULL;
+    try {
+      $sql = "UPDATE accounts SET status = 1 WHERE id = '$id' LIMIT 1";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      $response = $response->withStatus(500);
+      return $response;
+    }
+
+    // If nothing was affected.
+    if ($statement->rowCount() == 0) {
+      $response = $response->withStatus(404);
+      return $response;
+    }
+
+    $response = $response->withStatus(200);
+    return $response;
+    
   }
   public function list (Request $request, Response $response) {
+    $response = $response->withStatus(501);
+    return $response;
   }
 }
 

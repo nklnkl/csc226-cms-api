@@ -83,12 +83,20 @@ class Session_Service implements Resource_Router {
     return $response;
   }
   public function retrieve (Request $request, Response $response) {
+    $response = $response->withStatus(501);
+    return $response;
   }
   public function update (Request $request, Response $response) {
+    $response = $response->withStatus(501);
+    return $response;
   }
   public function delete (Request $request, Response $response) {
+    $response = $response->withStatus(501);
+    return $response;
   }
   public function list (Request $request, Response $response) {
+    $response = $response->withStatus(501);
+    return $response;
   }
 }
 

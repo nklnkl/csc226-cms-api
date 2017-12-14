@@ -30,7 +30,6 @@ the url to query the blog post from the database.
   - description: client not allowed to retrieve this blog post
   - conditions:
     - blog post is private and not owned
-    - client not admin
 - code: 404
   - description: blog post was not found
 - code: 500

@@ -27,8 +27,6 @@ Updates a blog from the database.
   - description: client not allowed to update this blog post
   - conditions:
     - blog post not owned
-    - account inactive
-    - client not admin
 - code: 404
   - description: blog post was not found
 - code: 409

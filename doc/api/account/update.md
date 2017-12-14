@@ -30,8 +30,6 @@ Updates account from database.
   - description: client forbidden to update account
   - conditions:
     - target account not owned
-    - client account inactive
-    - client not admin
 - code: 404
   - description: account not found
 - code: 409

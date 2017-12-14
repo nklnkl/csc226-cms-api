@@ -1,1 +1,1 @@
-winpty php -S localhost:10010 -t api/index.php
+php -S localhost:10010 -t www/

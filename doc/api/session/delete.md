@@ -24,7 +24,6 @@ Deletes session from database.
   - description: client forbidden to delete session
   - conditions:
     - session not owned
-    - client not admin
 - code: 404
   - description: session was not found
 - code: 500

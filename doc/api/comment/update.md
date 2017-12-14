@@ -27,8 +27,6 @@ Updates comment from database.
   - description: client not allowed to update this comment
   - conditions:
     - comment not owned
-    - account inactive
-    - client not admin
 - code: 404
   - description: comment was not found
 - code: 422

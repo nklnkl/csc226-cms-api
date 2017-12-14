@@ -24,8 +24,6 @@ Delete comment from database.
   - description: client not allowed to delete this comment
   - conditions:
     - comment not owned
-    - account inactive
-    - client not admin
 - code: 404
   - description: the comment could not be found
 - code: 500
