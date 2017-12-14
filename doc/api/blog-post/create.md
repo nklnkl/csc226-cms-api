@@ -13,6 +13,7 @@ Submits blog post to database.
 - body
   - title (string, required)
   - body (string, required)
+  - privacy (integer, required)
 
 ## Response
 - code: 200
@@ -33,5 +34,6 @@ Submits blog post to database.
     - error (array, required)
       - 1 (string, optional): title invalid
       - 2 (string, optional): body invalid
+      - 3 (integer, optional): privacy invalid
 - code: 500
   - description: server error

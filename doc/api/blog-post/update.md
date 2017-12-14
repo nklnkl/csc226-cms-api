@@ -13,8 +13,9 @@ Updates a blog from the database.
 - url parameters
   - id (string, required)
 - body
-  - title (string, required)
-  - body (string, required)
+  - title (string, optional)
+  - body (string, optional)
+  - privacy (integer, optional)
 
 ## Response
 - code: 200
@@ -27,6 +28,7 @@ Updates a blog from the database.
   - description: client not allowed to update this blog post
   - conditions:
     - blog post not owned
+    - client not admin
 - code: 404
   - description: blog post was not found
 - code: 409
@@ -40,5 +42,6 @@ Updates a blog from the database.
     - error (array, required)
       - 1 (string, optional): title invalid
       - 2 (string, optional): body invalid
+      - 3 (integer, optional): privacy invalid
 - code: 500
   - description: server error

@@ -55,7 +55,16 @@ $app->add(function ($request, $response, $next) {
     // Try SQL.
     $statement = NULL;
     try {
-      $sql = "SELECT accounts.role FROM sessions INNER JOIN accounts ON sessions.account_id = accounts.id WHERE id = '$session_id' AND account_id = '$account_id' LIMIT 1";
+      $sql = "
+      SELECT accounts.role, accounts.status
+      FROM sessions
+      INNER JOIN accounts
+        ON sessions.account_id = accounts.id
+      WHERE id = '$session_id'
+      AND
+      account_id = '$account_id'
+      LIMIT 1
+      ";
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       $response = $response->withStatus(500);
@@ -72,6 +81,7 @@ $app->add(function ($request, $response, $next) {
       $result = $statement->fetch();
       $request = $request->withAttribute('role', $result['role']);
       $request = $request->withAttribute('session', true);
+      $request = $request->withAttribute('status', $result['status']);
       next($request, $response);
     }
   }

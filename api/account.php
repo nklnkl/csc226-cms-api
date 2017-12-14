@@ -182,7 +182,7 @@ class Account_Service implements Resource_Router {
       SET location = CASE
         WHEN $location THEN $location ELSE location END,
       SET status = CASE
-        WHEN $status THEN $status ELSE status END,
+        WHEN $status THEN $status ELSE status END
       WHERE id = '$request->getAttribute('id')'
       LIMIT 1
       ";
