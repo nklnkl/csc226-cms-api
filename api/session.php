@@ -69,8 +69,12 @@ class Session_Service implements Resource_Router {
     // SQL.
     $statement = NULL;
     try {
-      $sql = "INSERT INTO sessions (id, created, updated, account_id) VALUES
-      ('$id', '$created', '$updated', '$account_id')";
+      $sql = "
+      INSERT INTO sessions
+        (id, created, updated, account_id)
+      VALUES
+        ('$id', '$created', '$updated', '$account_id')
+      ";
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       $response = $response->withStatus(500);
@@ -91,7 +95,43 @@ class Session_Service implements Resource_Router {
     return $response;
   }
   public function delete (Request $request, Response $response) {
-    $response = $response->withStatus(501);
+
+    // If not valid session, return early.
+    if (!$request->getAttribute('session')) {
+      $response = $response->withStatus(401);
+      return $response;
+    }
+
+    // If client is not owner AND not admin, return early.
+    $owner = ($request->getAttribute('id') == $request->getHeader('session-id'))
+    if ( !$owner && $request->getAttribute('role') != 1 ) {
+      $response = $response->withStatus(403);
+      return $response;
+    }
+
+    // Try SQL.
+    $statement = NULL;
+    try {
+      $sql = "
+      DELETE sessions
+      WHERE
+        id = '$request->getAttribute('id')'
+      LIMIT 1
+      ";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      $response = $response->withStatus(500);
+      return $response;
+    }
+
+    // If nothing was affected.
+    if ($statement->rowCount() == 0) {
+      $response = $response->withStatus(404);
+      return $response;
+    }
+
+    // Success!
+    $response = $response->withStatus(200);
     return $response;
   }
   public function list (Request $request, Response $response) {
