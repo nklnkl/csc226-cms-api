@@ -24,23 +24,13 @@ $container['db'] = function ($c) {
 };
 
 /**
- * CORS
- */
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-});
-$app->add(function ($req, $res, $next) {
-    $response = $next($req, $res);
-    return $response
-            ->withHeader('Access-Control-Allow-Origin', 'http://mysite')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
-
-/**
  * Session middleware
  */
-$app->add(function ($request, $response, $next) {
+$mw = function ($request, $response, $next) {
+  $response = $response
+    ->withHeader('Access-Control-Allow-Origin', '*')
+    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 
   // Default session to false.
   $request = $request->withAttribute('session', false);
@@ -60,9 +50,10 @@ $app->add(function ($request, $response, $next) {
       FROM sessions
       INNER JOIN accounts
         ON sessions.account_id = accounts.id
-      WHERE id = '$session_id'
-      AND
-      account_id = '$account_id'
+      WHERE
+        sessions.id = '$session_id[0]'
+        AND
+        sessions.account_id = '$account_id[0]'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -71,26 +62,27 @@ $app->add(function ($request, $response, $next) {
       return $response;
     }
 
-    // If session not matched, continue with no change.
-    if ($statement->rowCount() == 0) {
-      next($request, $response);
-    }
-
-    // If matched, set session to true.
-    else {
+    // If session matched
+    if ($statement->rowCount() != 0) {
       $result = $statement->fetch();
       $request = $request->withAttribute('role', $result['role']);
       $request = $request->withAttribute('session', true);
       $request = $request->withAttribute('status', $result['status']);
-      next($request, $response);
     }
   }
 
-  // If session headers are not present, continue with no change.
-  else
-    next($request, $response);
+  $response = $next($request, $response);
+  return $response;
+};
+$app->add($mw);
 
+/**
+ * CORS
+ */
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
 });
+
 
 /**
  * ROUTES

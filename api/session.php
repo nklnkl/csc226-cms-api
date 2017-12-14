@@ -103,7 +103,7 @@ class Session_Service implements Resource_Router {
     }
 
     // If client is not owner AND not admin, return early.
-    $owner = ($request->getAttribute('id') == $request->getHeader('session-id'))
+    $owner = ($request->getAttribute('id') == $request->getHeader('session-id'));
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;

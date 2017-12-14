@@ -46,7 +46,8 @@ class Account_Service implements Resource_Router {
       password,
       username,
       bio,
-      location)
+      location,
+      role)
     VALUES
       ('$id',
       '$created',
@@ -56,7 +57,8 @@ class Account_Service implements Resource_Router {
       '$password',
       '$username',
       '$bio',
-      '$location')
+      '$location',
+      '0')
     ";
 
     // Try to execute sql.
@@ -78,13 +80,15 @@ class Account_Service implements Resource_Router {
 
   public function retrieve (Request $request, Response $response) {
 
+    $targetId = $request->getAttribute('id');
+
     // Try SQL.
     $statement = NULL;
     try {
       $sql = "
       SELECT * FROM accounts
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -117,7 +121,7 @@ class Account_Service implements Resource_Router {
       unset($account['email']);
 
     // If client does not have ownership of resource AND not admin, remove email from result.
-    $owner = ($request->getAttribute('id') == $request->getHeader('account-id'));
+    $owner = ($request->getAttribute('id') == $request->getHeader('account-id')[0]);
     if (!$owner && $request->getAttribute('role') != 1)
       unset($account['email']);
 
@@ -136,7 +140,7 @@ class Account_Service implements Resource_Router {
     }
 
     // If client is not owner AND not admin, return early.
-    $owner = ($request->getAttribute('id') == $request->getHeader('account-id'))
+    $owner = ($request->getAttribute('id') == $request->getHeader('account-id')[0]);
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;
@@ -150,7 +154,9 @@ class Account_Service implements Resource_Router {
     // Get email from body.
     $email = $update['email'];
     // Get password from body and hash.
-    $password = password_hash($update['password'], PASSWORD_DEFAULT);
+    $password = $update['password'];
+    if ($password)
+      $password = password_hash($password, PASSWORD_DEFAULT);
     // Get username from body.
     $username = $update['username'];
     // Get bio from body.
@@ -165,30 +171,25 @@ class Account_Service implements Resource_Router {
       $status = $update['status'];
     }
 
-    // Try Update SQL.
+    // Try Update SQL.\
+    $targetId = $request->getAttribute('id');
     $statement = NULL;
     try {
       $sql = "
       UPDATE accounts
-      SET updated = $updated,
-      SET email = CASE
-        WHEN $email THEN $email ELSE email END,
-      SET password = CASE
-        WHEN $password THEN $password ELSE password END,
-      SET username = CASE
-        WHEN $username THEN $username ELSE username END,
-      SET bio = CASE
-        WHEN $bio THEN $bio ELSE bio END,
-      SET location = CASE
-        WHEN $location THEN $location ELSE location END,
-      SET status = CASE
-        WHEN $status THEN $status ELSE status END
-      WHERE id = '$request->getAttribute('id')'
-      LIMIT 1
+      SET updated = '$updated',
+      email = IF('$email' = '', email, '$email'),
+      password = IF('$password' = '', password, '$password'),
+      username = IF('$username' = '', username, '$username'),
+      bio = IF('$bio' = '', bio, '$bio'),
+      location = IF('$location' = '', location, '$location'),
+      status = IF('$status' IS NOT null, status, '$status')
+      WHERE id = '$targetId'
       ";
       $statement = $this->db->query($sql);
     } catch (PDOexception $e) {
       // If duplicate error occurs, return early.
+      throw($e);
       if ($e->getCode() == '23000') {
         $response = $response->withStatus(409);
         return $response;
@@ -216,20 +217,21 @@ class Account_Service implements Resource_Router {
     }
 
     // If client is not owner AND not admin, return early.
-    $owner = ($request->getAttribute('id') == $request->getHeader('account-id'))
+    $owner = ($request->getAttribute('id') == $request->getHeader('account-id')[0]);
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;
     }
 
     // Try SQL.
+    $targetId = $request->getAttribute('id');
     $statement = NULL;
     try {
       $sql = "
       UPDATE accounts
       SET status = 1
       WHERE
-        id = '$request->getAttribute('id')'
+        id = '$targetId'
       LIMIT 1
       ";
       $statement = $this->db->query($sql);
@@ -287,12 +289,13 @@ class Account_Service implements Resource_Router {
         $sql = "
         SELECT id, username
         FROM accounts
+        ORDER BY created
         LIMIT $offset, $size
-        ORDER BY username
         ";
         $statement = $this->db->query($sql);
       } catch (PDOexception $e) {
         // If internal database error, return early.
+        throw($e);
         $response = $response->withStatus(500);
         return $response;
       }
