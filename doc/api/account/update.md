@@ -30,6 +30,7 @@ Updates account from database.
   - description: client forbidden to update account
   - conditions:
     - target account not owned
+    - client account not admin
 - code: 404
   - description: account not found
 - code: 409
@@ -38,12 +39,8 @@ Updates account from database.
     - error (array, required)
       - 1 (string, optional): email already in use
       - 2 (string, optional): username already in use
-- code: 410
-  - description: account inactive
-  - conditions:
-    - target account inactive
-    - client not admin
 - code: 422
+  - CURRENTLY NOT IMPLEMENTED!
   - description: request body data invalid
   - body
     - error (array, required)

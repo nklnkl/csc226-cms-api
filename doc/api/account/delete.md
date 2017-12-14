@@ -24,9 +24,8 @@ Deactivates account from database.
   - description: client forbidden to deactivate account
   - conditions:
     - target account not owned
+    - client not admin
 - code: 404
   - description: account not found
-- code: 409
-  - description: account already deactivated
 - code: 500
   - description: server error
