@@ -3,7 +3,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Interop\Container\ContainerInterface as ContainerInterface;
 
-class Blog_Post_Service implements Resource_Router {
+class Blog_Post_Service {
   protected $container;
   protected $db;
 

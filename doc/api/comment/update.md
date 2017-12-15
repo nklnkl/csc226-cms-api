@@ -13,7 +13,6 @@ Updates comment from database.
 - url parameters
   - id (string, required)
 - body
-  - title (string, required)
   - body (string, required)
 
 ## Response

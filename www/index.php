@@ -110,7 +110,8 @@ $app->post('/api/comment', \Comment_Service::class . ':create');
 $app->get('/api/comment/{id}', \Comment_Service::class . ':retrieve');
 $app->patch('/api/comment/{id}', \Comment_Service::class . ':update');
 $app->delete('/api/comment/{id}', \Comment_Service::class . ':delete');
-$app->get('/api/comment', \Comment_Service::class . ':list');
+$app->get('/api/comment/blog-post/{id}', \Comment_Service::class . ':listBlogPost');
+$app->get('/api/comment/account/{id}', \Comment_Service::class . ':listAccount');
 
 $app->run();
 
