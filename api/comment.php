@@ -221,7 +221,7 @@ class Comment_Service {
   public function listBlogPost (Request $request, Response $response) {
 
     // Get username from param query.
-    $account_id = $request->getAttribute('id');
+    $blog_post_id = $request->getAttribute('id');
     // Get list pagination, default to 0 if NULL.
     $page = $request->getQueryParam('page', $default = 0);
     // Get list size.
@@ -232,42 +232,20 @@ class Comment_Service {
     // Default statement to NULL.
     $statement = NULL;
 
-    // Try SQL with query param, by like username, limited.
-    if ($account_id) {
-      try {
-        $sql = "
-        SELECT *
-        FROM comments
-        WHERE
-          account_id = '$account_id'
-        ORDER BY created
-        LIMIT $offset, $size
-        ";
-        $statement = $this->db->query($sql);
-      } catch (PDOexception $e) {
-        // If internal database error, return early.
-        $response = $response->withStatus(500);
-        return $response;
-      }
-    }
-    // Try SQL without query param, get all, limited.
-    else {
-      try {
-        $sql = "
-        SELECT *
-        FROM blog_posts
-        WHERE
-          privacy = 0
-        ORDER BY created
-        LIMIT $offset, $size
-        ";
-        $statement = $this->db->query($sql);
-      } catch (PDOexception $e) {
-        throw($e);
-        // If internal database error, return early.
-        $response = $response->withStatus(500);
-        return $response;
-      }
+    try {
+      $sql = "
+      SELECT *
+      FROM comments
+      WHERE
+        blog_post_id = '$blog_post_id'
+      ORDER BY created
+      LIMIT $offset, $size
+      ";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      // If internal database error, return early.
+      $response = $response->withStatus(500);
+      return $response;
     }
 
     // If nothing found, return early.
@@ -284,7 +262,46 @@ class Comment_Service {
     return $response;
   }
   public function listAccount (Request $request, Response $response) {
-    $response = $response->withStatus(501);
+
+    // Get username from param query.
+    $account_id = $request->getAttribute('id');
+    // Get list pagination, default to 0 if NULL.
+    $page = $request->getQueryParam('page', $default = 0);
+    // Get list size.
+    $size = 5;
+    // Default offset to null.
+    $offset = ($size * $page);
+
+    // Default statement to NULL.
+    $statement = NULL;
+
+    try {
+      $sql = "
+      SELECT *
+      FROM comments
+      WHERE
+        account_id = '$account_id'
+      ORDER BY created
+      LIMIT $offset, $size
+      ";
+      $statement = $this->db->query($sql);
+    } catch (PDOexception $e) {
+      // If internal database error, return early.
+      $response = $response->withStatus(500);
+      return $response;
+    }
+
+    // If nothing found, return early.
+    if ($statement->rowCount() == 0) {
+      $response = $response->withStatus(404);
+      return $response;
+    }
+
+    // Get rows as list array.
+    $list = $statement->fetchAll();
+
+    // Success!
+    $response = $response->withJson($list);
     return $response;
   }
 }
