@@ -66,6 +66,7 @@ class Comment_Service {
     }
 
     // Success!
+    $response = $response->withStatus(204);
     return $response;
   }
   public function retrieve (Request $request, Response $response) {
@@ -149,6 +150,8 @@ class Comment_Service {
       return $response;
     }
 
+    // Success!
+    $response = $response->withStatus(204);
     return $response;
   }
   public function delete (Request $request, Response $response) {
@@ -215,7 +218,7 @@ class Comment_Service {
     }
 
     // Success!
-    $response = $response->withStatus(200);
+    $response = $response->withStatus(204);
     return $response;
   }
   public function listBlogPost (Request $request, Response $response) {

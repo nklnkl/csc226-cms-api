@@ -75,6 +75,7 @@ class Account_Service {
     }
 
     // Success!
+    $response = $response->withStatus(204);
     return $response;
   }
 
@@ -204,6 +205,8 @@ class Account_Service {
       return $response;
     }
 
+    // Success!
+    $response = $response->withStatus(204);
     return $response;
   }
 

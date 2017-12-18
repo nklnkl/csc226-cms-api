@@ -156,7 +156,7 @@ class Session_Service {
     }
 
     // Success!
-    $response = $response->withStatus(200);
+    $response = $response->withStatus(204);
     return $response;
   }
   public function list (Request $request, Response $response) {

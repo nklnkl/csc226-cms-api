@@ -83,6 +83,7 @@ class Blog_Post_Service {
     }
 
     // Success!
+    $response = $response->withStatus(204);
     return $response;
   }
 
@@ -210,6 +211,8 @@ class Blog_Post_Service {
       return $response;
     }
 
+    // Success!
+    $response = $response->withStatus(204);
     return $response;
   }
 
@@ -277,7 +280,7 @@ class Blog_Post_Service {
     }
 
     // Success!
-    $response = $response->withStatus(200);
+    $response = $response->withStatus(204);
     return $response;
   }
   public function list (Request $request, Response $response) {
