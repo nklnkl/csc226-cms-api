@@ -16,8 +16,8 @@ Submits session to database.
 - code: 200
   - description: session created
   - body
-    - session-id (string, required)
-    - account-id (string, required)
+    - session_id (string, required)
+    - account_id (string, required)
 - code: 401
   - description: request body data incorrect
   - body

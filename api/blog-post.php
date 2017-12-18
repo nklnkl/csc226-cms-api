@@ -40,7 +40,7 @@ class Blog_Post_Service {
     $id = uniqid();
     $created = time();
     $updated = $created;
-    $account_id = $request->getHeader('account-id')[0];
+    $account_id = $request->getHeader('account_id')[0];
     $title = $blog_post['title'];
     $body = $blog_post['body'];
     $privacy = $blog_post['privacy'];
@@ -117,7 +117,7 @@ class Blog_Post_Service {
 
     // If blog_post is private, not owned, client is not admin.
     if ($blog_post['privacy'] == 1
-        && $request->getHeader('account-id')[0] != $blog_post['account_id']
+        && $request->getHeader('account_id')[0] != $blog_post['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;
@@ -163,7 +163,7 @@ class Blog_Post_Service {
     $blog_post = $statement->fetch();
 
     // If blog_post is not owned and client is not admin.
-    if ($request->getHeader('account-id')[0] != $blog_post['account_id']
+    if ($request->getHeader('account_id')[0] != $blog_post['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;
@@ -248,7 +248,7 @@ class Blog_Post_Service {
     $blog_post = $statement->fetch();
 
     // If blog_post not owned, and client is not admin.
-    if ($request->getHeader('account-id')[0] != $blog_post['account_id']
+    if ($request->getHeader('account_id')[0] != $blog_post['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;

@@ -8,8 +8,8 @@ Updates account from database.
   - PATCH
 - headers
   - 'Content-Type' : 'application/json'
-  - 'session-id' (string, required)
-  - 'account-id' (string, required)
+  - 'session_id' (string, required)
+  - 'account_id' (string, required)
 - body
   - email (string, optional)
   - password (string, optional)
@@ -25,7 +25,7 @@ Updates account from database.
 - code: 401
   - description: client not authorized
   - conditions
-    - session-id account-id combo invalid
+    - session_id account_id combo invalid
 - code: 403
   - description: client forbidden to update account
   - conditions:

@@ -121,7 +121,7 @@ class Account_Service {
       unset($account['email']);
 
     // If client does not have ownership of resource AND not admin, remove email from result.
-    $owner = ($request->getAttribute('id') == $request->getHeader('account-id')[0]);
+    $owner = ($request->getAttribute('id') == $request->getHeader('account_id')[0]);
     if (!$owner && $request->getAttribute('role') != 1)
       unset($account['email']);
 
@@ -140,7 +140,7 @@ class Account_Service {
     }
 
     // If client is not owner AND not admin, return early.
-    $owner = ($request->getAttribute('id') == $request->getHeader('account-id')[0]);
+    $owner = ($request->getAttribute('id') == $request->getHeader('account_id')[0]);
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;
@@ -216,7 +216,7 @@ class Account_Service {
     }
 
     // If client is not owner AND not admin, return early.
-    $owner = ($request->getAttribute('id') == $request->getHeader('account-id')[0]);
+    $owner = ($request->getAttribute('id') == $request->getHeader('account_id')[0]);
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;

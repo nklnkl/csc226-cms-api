@@ -28,7 +28,7 @@ Lists blog posts from database.
       - title (string, required)
       - body (string, required, reduced)
       - id (string, required)
-      - account-id (string, required)
+      - account_id (string, required)
       - created (integer, required)
       - updated (integer, required)
 - code: 404

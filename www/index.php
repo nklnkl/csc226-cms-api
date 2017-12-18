@@ -36,11 +36,11 @@ $mw = function ($request, $response, $next) {
   $request = $request->withAttribute('session', false);
 
   // If session headers are present.
-  if ($request->hasHeader('account-id') && $request->hasHeader('session-id')) {
+  if ($request->hasHeader('account_id') && $request->hasHeader('session_id')) {
 
     // Localize id's.
-    $session_id = $request->getHeader('session-id');
-    $account_id = $request->getHeader('account-id');
+    $session_id = $request->getHeader('session_id');
+    $account_id = $request->getHeader('account_id');
 
     // Try SQL.
     $statement = NULL;

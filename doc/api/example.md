@@ -8,8 +8,8 @@ Example of an api doc.
   - POST
 - headers (multiple)
   - 'Content-Type' : 'application/json'
-  - 'session-id' (string, required)
-  - 'account-id' (string, required)
+  - 'session_id' (string, required)
+  - 'account_id' (string, required)
 - url parameters (multiple)
   - category (string, required)
 - url queries

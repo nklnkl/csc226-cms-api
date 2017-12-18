@@ -8,8 +8,8 @@ Updates a blog from the database.
   - PATCH
 - headers
   - 'Content-Type' : 'application/json'
-  - 'session-id' (string, required)
-  - 'account-id' (string, required)
+  - 'session_id' (string, required)
+  - 'account_id' (string, required)
 - url parameters
   - id (string, required)
 - body
@@ -23,7 +23,7 @@ Updates a blog from the database.
 - code: 401
   - description: client was not authorized
   - conditions
-    - session-id account-id combo invalid
+    - session_id account_id combo invalid
 - code: 403
   - description: client not allowed to update this blog post
   - conditions:

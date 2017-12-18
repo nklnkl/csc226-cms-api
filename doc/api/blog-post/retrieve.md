@@ -9,8 +9,8 @@ the url to query the blog post from the database.
   - GET
 - headers
   - 'Content-Type' : 'application/json'
-  - 'session-id' (string, optional)
-  - 'account-id' (string, optional)
+  - 'session_id' (string, optional)
+  - 'account_id' (string, optional)
 - url parameters
   - id (string, required)
 
@@ -22,7 +22,7 @@ the url to query the blog post from the database.
       - title (string, required)
       - body (string, required)
       - id (string, required)
-      - account-id (string, required)
+      - account_id (string, required)
       - privacy (integer, required)
       - created (integer, required)
       - updated (integer, required)

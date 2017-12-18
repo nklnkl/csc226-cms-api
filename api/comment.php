@@ -27,7 +27,7 @@ class Comment_Service {
     $id = uniqid();
     $created = time();
     $updated = $created;
-    $account_id = $request->getHeader('account-id')[0];
+    $account_id = $request->getHeader('account_id')[0];
     $blog_post_id = $comment['blog_post_id'];
     $body = $comment['body'];
 
@@ -107,7 +107,7 @@ class Comment_Service {
     $comment = $statement->fetch();
 
     // If blog_post is not owned and client is not admin.
-    if ($request->getHeader('account-id')[0] != $comment['account_id']
+    if ($request->getHeader('account_id')[0] != $comment['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;
@@ -186,7 +186,7 @@ class Comment_Service {
     $comment = $statement->fetch();
 
     // If blog_post not owned, and client is not admin.
-    if ($request->getHeader('account-id')[0] != $comment['account_id']
+    if ($request->getHeader('account_id')[0] != $comment['account_id']
         && $request->getAttribute('role') != 1) {
       $response = $response->withStatus(403);
       return $response;

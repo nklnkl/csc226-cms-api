@@ -8,8 +8,8 @@ Retrieves account from database.
   - GET
 - headers
   - 'Content-Type' : 'application/json'
-  - 'session-id' (string, optional)
-  - 'account-id' (string, optional)
+  - 'session_id' (string, optional)
+  - 'account_id' (string, optional)
 - url parameters
   - id (string, required)
 

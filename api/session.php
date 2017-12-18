@@ -82,7 +82,7 @@ class Session_Service {
     }
 
     // Success!
-    $session = array('session-id' => $id, 'account-id' => $account['id']);
+    $session = array('session_id' => $id, 'account_id' => $account['id']);
     $response = $response->withJson($session);
     return $response;
   }
@@ -127,7 +127,7 @@ class Session_Service {
     $session = $statement->fetch();
 
     // If client is not owner AND not admin, return early.
-    $owner = ( $session['account_id'] == $request->getHeader('account-id')[0] );
+    $owner = ( $session['account_id'] == $request->getHeader('account_id')[0] );
     if ( !$owner && $request->getAttribute('role') != 1 ) {
       $response = $response->withStatus(403);
       return $response;

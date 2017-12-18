@@ -8,8 +8,8 @@ Submits comment to database.
   - POST
 - headers
   - 'Content-Type' : 'application/json'
-  - 'session-id' (string, required)
-  - 'account-id' (string, required)
+  - 'session_id' (string, required)
+  - 'account_id' (string, required)
 - body
   - blog_post_id (string, required)
   - body (string, required)
@@ -20,7 +20,7 @@ Submits comment to database.
 - code: 401
   - description: client not authorized
   - conditions
-    - session-id account-id combo invalid
+    - session_id account_id combo invalid
 - code: 403
   - description: client not allowed create comment
   - conditions:

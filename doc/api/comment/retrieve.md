@@ -20,7 +20,7 @@ the url to query the comment from database.
       - blog-post-id (string, required)
       - body (string, required)
       - id (string, required)
-      - account-id (string, required)
+      - account_id (string, required)
       - created (integer, required)
       - updated (integer, required)
 - code: 404
