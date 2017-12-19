@@ -84,7 +84,9 @@ class Blog_Post_Service {
 
     // Success!
     $response = $response->withStatus(200);
-    $response = $response->withJson({ id: $id });
+    $body = array();
+    $body['id'] = $id;
+    $response = $response->withJson($body);
     return $response;
   }
 
